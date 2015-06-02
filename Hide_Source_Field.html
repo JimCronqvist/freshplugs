@@ -1,0 +1,30 @@
+<script type="text/javascript">
+    jQuery.fn.onAvailable = function(fn)
+    {
+        var sel = this.selector;
+        var timer;
+        if(this.length > 0)
+        {
+            fn.call(this);   
+        }
+        else
+        {
+            timer = setInterval(function()
+		    {
+                if(jQuery(sel).length > 0)
+                {
+                    fn.call(jQuery(sel));
+                    clearInterval(timer);  
+                }
+            }, 50);
+        }
+    };
+  
+    jQuery(function()
+    {
+        jQuery('#helpdesk_ticket_source').onAvailable(function()
+        {
+            jQuery(this).closest('li').remove();
+        });
+    });    
+</script>
