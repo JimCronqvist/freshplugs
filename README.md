@@ -1,2 +1,1 @@
-# freshplugs
-Freshservice Freshplugs
+# Freshservice Freshplugs
