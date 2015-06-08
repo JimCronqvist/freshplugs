@@ -1,0 +1,11 @@
+<script type="text/javascript">
+    jQuery(function()
+    {
+        // Move the meta tooltip information to the top of the conversation.
+        jQuery('#original_request').before(jQuery('#ticket_meta_info').text()); 
+        jQuery('.meta-info div').css('width', 'auto').css('display','inline-block').parent().css('margin-left','35px');
+        
+        // Show full URL as the referrer.
+        jQuery('span.meta-referrer').next().children('a').html(jQuery('span.meta-referrer').next().children('a').attr('href'));
+    });
+</script>
