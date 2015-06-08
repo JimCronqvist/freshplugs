@@ -4,5 +4,11 @@
         { 
             jQuery(this).html() == '<br>' ? jQuery(this).remove() : null; 
         });
+        
+        // From Gmail
+        jQuery('#ticket_original_request').children('div[dir="ltr"]').children('div').each(function()
+        { 
+            jQuery(this).html() == '<br>' ? jQuery(this).remove() : null; 
+        });
     });
 </script>
