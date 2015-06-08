@@ -1,0 +1,7 @@
+<script type="text/javascript">
+    jQuery(function()
+    {
+        var link = 'http://www.google.com?q=';
+        jQuery('.subject').html(jQuery('.subject').html().replace(/\d{7}/,'<a target="_blank" style="color:#008800;" href="'+link+'$&">$&</a>'));
+    });
+</script>
