@@ -1,0 +1,9 @@
+<script type="text/javascript">
+    jQuery(function()
+    {
+        jQuery('#conversation_reply').children('li').children('a').addClass('btn').addClass('btn-primary').insertBefore(jQuery('.btn-toolbar .cancel_btn', jQuery('#cnt-reply')));
+		jQuery('#cnt-reply .btn-toolbar').css('width', '100%');
+		jQuery('#conversation_reply, #reply_dialog').remove();
+		jQuery('#cnt-reply .btn-toolbar').find('a[data-status-name="Resolved"]').removeClass('btn-primary').addClass('btn-success');
+    });
+</script>
