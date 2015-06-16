@@ -1,0 +1,20 @@
+<script type="text/javascript">
+    jQuery(function()
+    {
+        var scenario_url = jQuery('.ticket-actions').find('a[data-target="#execute_scenario"]').attr('href');
+        jQuery.get(scenario_url, '', function(data)
+        {
+            var $html = jQuery(data);
+            $html.children('script').remove();
+            $html.children('.scenario-search').remove();
+            $html.find('td').each(function()
+            {
+                var $this = jQuery(this);
+                $this.find('input:submit').val($this.find('strong').text()).attr('onclick', "jQuery('#noticeajax').show().html('<div class=\"sloading loading-block\"></div>');");
+            });
+            $html.html($html.find('form').css('float', 'left'));
+            $html.find('form').wrap('<li class="ticket-btns"></li>');
+            jQuery('.ticket-actions ul:first').prepend($html.html());
+        });
+    });
+</script>
