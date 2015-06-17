@@ -10,11 +10,38 @@
             $html.find('td').each(function()
             {
                 var $this = jQuery(this);
-                $this.find('input:submit').val($this.find('strong').text()).attr('onclick', "jQuery('#noticeajax').show().html('<div class=\"sloading loading-block\"></div>');");
+                $this.find('input:submit').val($this.find('strong').text());
+                $this.find('input:submit').each(function()
+                {
+                    var $submit = jQuery(this);
+                    if($submit.val().indexOf('[validate]') != -1)
+                    {
+                        $submit.val($submit.val().replace('[validate]','[v]'));
+                        $submit.prop('type', "button").addClass('jc_ticket_submit');
+                    }
+                    else
+                    {
+                        $submit.attr('onclick', "jQuery('#noticeajax').show().html('<div class=\"sloading loading-block\"></div>');jQuery('html, body').animate({scrollTop: 0}, 500);");
+                    }
+                });
             });
             $html.html($html.find('form').css('float', 'left'));
             $html.find('form').wrap('<li class="ticket-btns"></li>');
             jQuery('.ticket-actions ul:first').prepend($html.html());
+
+            jQuery(document).on('click', '.jc_ticket_submit', function(e)
+            {
+                if(jQuery('#custom_ticket_form').valid())
+                {
+                    jQuery('html, body').animate({scrollTop: 0}, 500);
+                    jQuery('#noticeajax').show().html('<div class=\"sloading loading-block\"></div>');
+                    jQuery(e.target).closest('form').submit();
+                }
+                else
+                {
+                    jQuery('html, body').animate({scrollTop: jQuery('#custom_ticket_form').offset().top-100}, 500);
+                }
+            });
         });
     });
 </script>
