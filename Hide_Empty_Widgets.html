@@ -1,0 +1,12 @@
+<script type="text/javascript">
+    jQuery(function()
+    {
+        jQuery('.widget:not(#TimesheetTab)').children('.content').each(function()
+        {
+            if(jQuery(this).height() == 0)
+            {
+                jQuery(this).parent().remove();
+            }
+        });
+    });
+</script>
