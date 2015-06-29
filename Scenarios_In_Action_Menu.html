@@ -1,47 +1,57 @@
 <script type="text/javascript">
     jQuery(function()
     {
-        var scenario_url = jQuery('.ticket-actions').find('a[data-target="#execute_scenario"]').attr('href');
-        jQuery.get(scenario_url, '', function(data)
+        var $scenario = jQuery('.ticket-actions').find('a[data-target="#execute_scenario"]');
+        // Check to prevent the freshplug to be loaded multiple times. Sometimes Freshservice does this, probably a bug on their end.
+        if(typeof $scenario.attr('data-jc') == 'undefined') 
         {
-            var $html = jQuery(data);
-            $html.children('script').remove();
-            $html.children('.scenario-search').remove();
-            $html.find('td').each(function()
+            $scenario.attr('data-jc', '1');
+            var scenario_url = $scenario.attr('href');
+            $scenario.hide();
+            jQuery.get(scenario_url, '', function(data)
             {
-                var $this = jQuery(this);
-                $this.find('input:submit').val($this.find('strong').text());
-                $this.find('input:submit').each(function()
+                console.log('Load scenarios into the action menu');
+                var $html = jQuery(data);
+                $html.children('script').remove();
+                $html.children('.scenario-search').remove();
+                $html.find('td').each(function()
                 {
-                    var $submit = jQuery(this);
-                    if($submit.val().indexOf('[validate]') != -1)
+                    var $this = jQuery(this);
+                    $this.find('input:submit').val($this.find('strong').text());
+                    $this.find('input:submit').each(function()
                     {
-                        $submit.val($submit.val().replace('[validate]','[v]'));
-                        $submit.prop('type', "button").addClass('jc_ticket_submit');
+                        var $submit = jQuery(this);
+                        if($submit.val().indexOf('[validate]') != -1)
+                        {
+                            $submit.val($submit.val().replace('[validate]','[v]'));
+                            console.log($submit.val());
+                            $submit.prop('type', "button").addClass('jc_ticket_submit');
+                        }
+                        else
+                        {
+                            $submit.attr('onclick', "jQuery('#noticeajax').show().html('<div class=\"sloading loading-block\"></div>');jQuery('html, body').animate({scrollTop: 0}, 500);");
+                        }
+                    });
+                });
+                $html.html($html.find('form').css('float', 'left'));
+                $html.find('form').wrap('<li class="ticket-btns"></li>');
+                jQuery('.ticket-actions ul:first').prepend($html.html());
+    
+                jQuery(document).on('click', '.jc_ticket_submit', function(e)
+                {
+                    console.log('Clicked on .jc_ticket_submit');
+                    if(jQuery('#custom_ticket_form').valid())
+                    {
+                        jQuery('html, body').animate({scrollTop: 0}, 500);
+                        jQuery('#noticeajax').show().html('<div class=\"sloading loading-block\"></div>');
+                        jQuery(e.target).closest('form').submit();
                     }
                     else
                     {
-                        $submit.attr('onclick', "jQuery('#noticeajax').show().html('<div class=\"sloading loading-block\"></div>');jQuery('html, body').animate({scrollTop: 0}, 500);");
+                        jQuery('html, body').animate({scrollTop: jQuery('#custom_ticket_form').offset().top-100}, 500);
                     }
                 });
             });
-            $html.html($html.find('form').css('float', 'left'));
-            $html.find('form').wrap('<li class="ticket-btns"></li>');
-            jQuery('.ticket-actions ul:first').prepend($html.html());
-
-            jQuery(document).on('click', '.jc_ticket_submit', function(e)
-            {
-                if(jQuery('#custom_ticket_form').valid())
-                {
-                    jQuery('html, body').animate({scrollTop: 0}, 500);
-                    jQuery('#noticeajax').show().html('<div class=\"sloading loading-block\"></div>');
-                    jQuery(e.target).closest('form').submit();
-                }
-                else
-                {
-                    jQuery('html, body').animate({scrollTop: jQuery('#custom_ticket_form').offset().top-100}, 500);
-                }
-            });
-        });
+        }
     });
 </script>
