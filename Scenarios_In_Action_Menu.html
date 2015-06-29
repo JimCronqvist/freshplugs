@@ -37,6 +37,7 @@
                 $html.find('form').wrap('<li class="ticket-btns"></li>');
                 jQuery('.ticket-actions ul:first').prepend($html.html());
     
+                jQuery(document).off('click', '.jc_ticket_submit');
                 jQuery(document).on('click', '.jc_ticket_submit', function(e)
                 {
                     console.log('Clicked on .jc_ticket_submit');
