@@ -8,6 +8,7 @@
                 if(request.url.indexOf('/execute_scenario') != -1)
                 {
                     console.log('Reloading after an executed scenario');
+                    jQuery('body').prepend('<div class="sloading loading-block" style="position:fixed;width:100%;height:100% !important;z-index:1;background:#FFF;opacity:0.5;"></div>');
                     window.location.replace('');
                 }
             }
