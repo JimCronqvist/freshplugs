@@ -1,0 +1,16 @@
+<script type="text/javascript">
+    jQuery(function()
+    {
+        Ajax.Responders.register(
+        {
+            onComplete: function(request)
+            {
+                if(request.url.indexOf('/execute_scenario') != -1)
+                {
+                    console.log('Reloading after an executed scenario');
+                    window.location.replace('');
+                }
+            }
+        });
+    });
+</script>
