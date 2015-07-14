@@ -1,6 +1,6 @@
 jQuery(function()
 {
-	console.log('Freshservice custom js has been loaded.');
+    console.log('Freshservice custom js has been loaded.');
 	
 	var uri = function()
 	{
@@ -21,13 +21,16 @@ jQuery(function()
 	
 	if(uri == '/helpdesk/tickets')
 	{
-		seconds = 30;
-				
-		jQuery('#rightCol').children('div.buttons').children('div.pull-right').prepend('<a class="btn btn-info" href="#" style="margin:0px 15px;" onclick="jc_refresh_tickets(); return false;">Reload now</a>');
-		jQuery('#rightCol').children('div.buttons').children('div.pull-right').prepend('<div id="jc_refresh" style="display:inline-block;"></div>');
-		
-		setInterval(function()
+        seconds = 30;
+
+        setInterval(function()
 		{
+            if(jQuery('#jc_refresh').length == 0)
+            {
+                jQuery('#rightCol').children('div.buttons').children('div.pull-right').prepend('<a class="btn btn-info" href="#" style="margin:0px 15px;" onclick="jc_refresh_tickets(); return false;">Reload now</a>');
+                jQuery('#rightCol').children('div.buttons').children('div.pull-right').prepend('<div id="jc_refresh" style="display:inline-block;"></div>');
+            }
+            
 			seconds--;
 			jQuery('#jc_refresh').html('Reloading in ' + seconds + ' seconds');
 			if(seconds == 0)
@@ -40,6 +43,6 @@ jQuery(function()
 
 function jc_refresh_tickets()
 {
-	seconds = 30;
-	refresh_tickets(); // function from Freshservice
+    seconds = 30;
+    refresh_tickets(); // function from Freshservice
 };
