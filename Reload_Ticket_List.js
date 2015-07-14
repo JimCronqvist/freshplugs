@@ -23,8 +23,8 @@ jQuery(function()
 	{
 		seconds = 30;
 				
+		jQuery('#rightCol').children('div.buttons').children('div.pull-right').prepend('<a class="btn btn-info" href="#" style="margin:0px 15px;" onclick="jc_refresh_tickets(); return false;">Reload now</a>');
 		jQuery('#rightCol').children('div.buttons').children('div.pull-right').prepend('<div id="jc_refresh" style="display:inline-block;"></div>');
-		jQuery('#rightCol').children('div.buttons').children('div.pull-right').prepend('<a class="btn btn-info" href="#" style="margin-left:15px;" onclick="jc_refresh_tickets(); return false;">Reload now</a>');
 		
 		setInterval(function()
 		{
