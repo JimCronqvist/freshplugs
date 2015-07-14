@@ -5,6 +5,9 @@
         // Check to prevent the freshplug to be loaded multiple times. Sometimes Freshservice does this, probably a bug on their end.
         if(typeof $scenario.attr('data-jc') == 'undefined') 
         {
+            // Save the custom_ticket_form state as the form are when the page load in order to notice if there are changes done that are not saved prior to an execution of a scenario.
+            var custom_ticket_form_snapshot = jQuery('#custom_ticket_form').serialize();
+            
             $scenario.attr('data-jc', '1');
             var scenario_url = $scenario.attr('href');
             $scenario.hide();
@@ -41,6 +44,15 @@
                 jQuery(document).on('click', '.jc_ticket_submit', function(e)
                 {
                     console.log('Clicked on .jc_ticket_submit');
+                    
+                    if(custom_ticket_form_snapshot != jQuery('#custom_ticket_form').serialize())
+                    {
+                        if(confirm('You have unsaved changes in the ticket fields that will be lost if you proceed, are you sure you want to proceed?') == false)
+                        {
+                            return false;
+                        }
+                    }
+                    
                     if(jQuery('#custom_ticket_form').valid())
                     {
                         jQuery('html, body').animate({scrollTop: 0}, 500);
