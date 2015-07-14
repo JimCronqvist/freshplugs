@@ -7,6 +7,10 @@
         {
             // Save the custom_ticket_form state as the form are when the page load in order to notice if there are changes done that are not saved prior to an execution of a scenario.
             var custom_ticket_form_snapshot = jQuery('#custom_ticket_form').serialize();
+            jQuery(document).on('ticket_fields_updated', function()
+            {
+                custom_ticket_form_snapshot = jQuery('#custom_ticket_form').serialize();
+            });
             
             $scenario.attr('data-jc', '1');
             var scenario_url = $scenario.attr('href');
