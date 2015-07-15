@@ -1,6 +1,6 @@
 jQuery(function()
 {
-    jQuery('#active_filter').on('click', function()
+    jQuery(document).on('click', '#active_filter', function()
     {
         jc_old_cookie = getCookie('filter_name');
         jQuery('.fd-menu').children('a').slice(0,3).each(function()
