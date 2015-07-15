@@ -1,22 +1,23 @@
 jQuery(function()
 {
+    jc_view_count = {};
     jQuery(document).on('click', '#active_filter', function()
     {
-        jc_old_cookie = getCookie('filter_name');
-        jQuery('.fd-menu').children('a').each(function()
+        var jc_old_cookie = getCookie('filter_name');
+        jQuery('.fd-menu').children('a').slice(0,2).each(function()
         {
             var $this = jQuery(this);
-            if($this.attr('data-jc_counted') == (new Date()).getMinutes())
-            {
-                return true;
-            }
             var href = $this.attr('href');
             if(href.indexOf('/helpdesk/tickets/view/') != -1)
             {
                 var viewId = href.replace('/helpdesk/tickets/view/', '');
-                console.log(viewId);
-                document.cookie = "filter_name="+viewId+"; expires=0; path=/";
-                jQuery.ajax({
+                if(jc_view_count[viewId] == (new Date()).getMinutes())
+                {
+                    console.log(viewId+' skipped, cached');
+                    return true;
+                }
+                jQuery.ajax(
+                {
                     url: '/helpdesk/tickets/view/'+viewId+'?_pjax=%23body-container',
                     success: function(data)
                     {
@@ -28,7 +29,7 @@ jQuery(function()
                         console.log(viewId+': '+number);
                         $this.children('span').remove();
                         $this.html($this.text()+'<span class="badge" style="float:right;">'+number+'</span>');
-                        $this.attr('data-jc_counted', (new Date()).getMinutes());
+                        jc_view_count[viewId] = (new Date()).getMinutes();
                         document.cookie = "filter_name="+jc_old_cookie+"; expires=0; path=/";
                     }
                 });
