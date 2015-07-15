@@ -30,6 +30,11 @@ jQuery(function()
                 if(jc_view_count[viewId]['minute'] == (new Date()).getMinutes())
                 {
                     console.log(viewId+' skipped, cached');
+                    var $view = jQuery('a[href="'+baseUrl+viewId+'"]');
+                    if($view.children('span.badge').length == 0)
+                    {
+                        $view.html($view.text()+'<span class="badge" style="float:right;">'+jc_view_count[viewId]['number']+'</span>');
+                    }
                     return true;
                 }
                 jQuery.ajax(
