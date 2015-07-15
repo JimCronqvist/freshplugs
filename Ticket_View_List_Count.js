@@ -3,7 +3,7 @@ jQuery(function()
     jQuery(document).on('click', '#active_filter', function()
     {
         jc_old_cookie = getCookie('filter_name');
-        jQuery('.fd-menu').children('a').slice(0,3).each(function()
+        jQuery('.fd-menu').children('a').each(function()
         {
             var $this = jQuery(this);
             if($this.attr('data-jc_counted') == (new Date()).getMinutes())
