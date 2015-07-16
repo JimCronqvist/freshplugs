@@ -19,7 +19,7 @@ jQuery(function()
     };
     uri = uri();
 
-    if(uri == '/helpdesk/tickets')
+    if(uri.substring(0, 17) == '/helpdesk/tickets')
     {
         seconds = 30;
         setInterval(function()
