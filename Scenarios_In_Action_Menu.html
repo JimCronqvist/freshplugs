@@ -31,17 +31,17 @@
                         var $submit = jQuery(this);
                         if($submit.val().indexOf('[validate]') != -1)
                         {
-                         	if($submit.val().indexOf('[reply]') != -1)
-                        	{
-                            	$submit.val($submit.val().replace(' [reply]',''));
-                            	$submit.attr('data-jc_reply', 1);
+                            if($submit.val().indexOf('[reply]') != -1)
+                            {
+                                $submit.val($submit.val().replace(' [reply]',''));
+                                $submit.attr('data-jc_reply', 1);
                                 $submit.attr('data-jc_reply_html', sub_title);
-                        	}
+                            }
                             else
                             {
                                 $submit.attr('title', sub_title);
                             }
-                          
+                            
                             $submit.val($submit.val().replace('[validate]','[v]'));
                             console.log($submit.val());
                             $submit.prop('type', "button").addClass('jc_ticket_submit');
@@ -78,19 +78,19 @@
                       	
                         if($target.attr('data-jc_reply') == 1)
                         {
-                          	// Add a reply since freshservice unfortunately does not support that in scenarios, and public notes is not counted in the statistics.
-							jQuery('a[data-replyto-handle]').click();
-							jQuery(document).one('note_created', function()
-							{
+                            // Add a reply since freshservice unfortunately does not support that in scenarios, and public notes is not counted in the statistics.
+                            jQuery('a[data-replyto-handle]').click();
+                            jQuery(document).one('note_created', function()
+                            {
                                 $form.submit();
                             });
                           
                             //var requester_first_name = jQuery('#original_request').find('a.username').text();
-                          	var requester_first_name = '{{ticket.requester.firstname}}';
+                            var requester_first_name = '{{ticket.requester.firstname}}';
                             var requester_placeholder = 'ticket.requester.firstname';
                             var reply_html = $target.attr('data-jc_reply_html').replace(/\n/g, '<br>').replace('{'+'{'+requester_placeholder+'}'+'}', requester_first_name);
-							jQuery('#cnt-reply').find('.redactor_editor').children('div:first').children('p:first').html(reply_html);
-							jQuery('#HelpdeskReply').submit();
+                            jQuery('#cnt-reply').find('.redactor_editor').children('div:first').children('p:first').html(reply_html);
+                            jQuery('#HelpdeskReply').submit();
                         }
                         else
                         {
