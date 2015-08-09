@@ -1,6 +1,6 @@
 <script type="text/javascript">
     jQuery(function()
-    {
+    {      
         var $scenario = jQuery('.ticket-actions').find('a[data-target="#execute_scenario"]');
         // Check to prevent the freshplug to be loaded multiple times. Sometimes Freshservice does this, probably a bug on their end.
         if(typeof $scenario.attr('data-jc') == 'undefined') 
@@ -24,18 +24,31 @@
                 $html.find('td').each(function()
                 {
                     var $this = jQuery(this);
+                    var sub_title = $this.find('span.sub_title').html().replace('"', '\"');
                     $this.find('input:submit').val($this.find('strong').text());
                     $this.find('input:submit').each(function()
                     {
                         var $submit = jQuery(this);
                         if($submit.val().indexOf('[validate]') != -1)
                         {
+                         	if($submit.val().indexOf('[reply]') != -1)
+                        	{
+                            	$submit.val($submit.val().replace(' [reply]',''));
+                            	$submit.attr('data-jc_reply', 1);
+                                $submit.attr('data-jc_reply_html', sub_title);
+                        	}
+                            else
+                            {
+                                $submit.attr('title', sub_title);
+                            }
+                          
                             $submit.val($submit.val().replace('[validate]','[v]'));
                             console.log($submit.val());
                             $submit.prop('type', "button").addClass('jc_ticket_submit');
                         }
                         else
                         {
+                            $submit.attr('title', sub_title);
                             $submit.attr('onclick', "jQuery('#noticeajax').show().html('<div class=\"sloading loading-block\"></div>');jQuery('html, body').animate({scrollTop: 0}, 500);");
                         }
                     });
@@ -47,8 +60,8 @@
                 jQuery(document).off('click', '.jc_ticket_submit');
                 jQuery(document).on('click', '.jc_ticket_submit', function(e)
                 {
+                    var $target = jQuery(e.target).closest('.jc_ticket_submit');
                     console.log('Clicked on .jc_ticket_submit');
-                    
                     if(custom_ticket_form_snapshot != jQuery('#custom_ticket_form').serialize())
                     {
                         if(confirm('You have unsaved changes in the ticket fields that will be lost if you proceed, are you sure you want to proceed?') == false)
@@ -61,7 +74,28 @@
                     {
                         jQuery('html, body').animate({scrollTop: 0}, 500);
                         jQuery('#noticeajax').show().html('<div class=\"sloading loading-block\"></div>');
-                        jQuery(e.target).closest('form').submit();
+                        var $form = jQuery(e.target).closest('form');
+                      	
+                        if($target.attr('data-jc_reply') == 1)
+                        {
+                          	// Add a reply since freshservice unfortunately does not support that in scenarios, and public notes is not counted in the statistics.
+							jQuery('a[data-replyto-handle]').click();
+							jQuery(document).one('note_created', function()
+							{
+                                $form.submit();
+                            });
+                          
+                            //var requester_first_name = jQuery('#original_request').find('a.username').text();
+                          	var requester_first_name = '{{ticket.requester.firstname}}';
+                            var requester_placeholder = 'ticket.requester.firstname';
+                            var reply_html = $target.attr('data-jc_reply_html').replace(/\n/g, '<br>').replace('{'+'{'+requester_placeholder+'}'+'}', requester_first_name);
+							jQuery('#cnt-reply').find('.redactor_editor').children('div:first').children('p:first').html(reply_html);
+							jQuery('#HelpdeskReply').submit();
+                        }
+                        else
+                        {
+                            $form.submit();
+                        }
                     }
                     else
                     {
