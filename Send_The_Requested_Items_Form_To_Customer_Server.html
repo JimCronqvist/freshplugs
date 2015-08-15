@@ -1,0 +1,20 @@
+<script type="text/javascript">
+    jQuery(function()
+    {
+        setTimeout(function()
+        {
+            // Modify the server and the IF statement below for you custom category.
+            var server = 'https://example.com/it/freshservice/receiveForm';
+            if(jQuery('#helpdesk_ticket_custom_field_subcategory_10978').val() == 'Development request' && jQuery('#helpdesk_ticket_ticket_type').val() == 'Service Request')
+            {
+                console.log('Development request - Send to customer server');
+                var display_id = jQuery('#ticket-display-id').text().replace('SR-','');
+                if(jQuery('#service-req-accordion').length > 0)
+                {
+                    var html = jQuery('#service-req-accordion').html();
+                    jQuery.post(server+'?display_id='+display_id, {'form': html}, function(data){console.log(data);});
+                }
+            }
+        },5000); // Wait for the page to be finished loaded, we don't care about exactly when since this will be a background request, and 5 seconds should be enough.      
+    });
+</script>
