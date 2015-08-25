@@ -29,27 +29,24 @@
                     $this.find('input:submit').each(function()
                     {
                         var $submit = jQuery(this);
-                        if($submit.val().indexOf('[validate]') != -1)
+                        console.log($submit.val());
+                        $submit.prop('type', "button").addClass('jc_ticket_submit');
+                        
+                        if($submit.val().indexOf('[reply]') != -1)
                         {
-                            if($submit.val().indexOf('[reply]') != -1)
-                            {
-                                $submit.val($submit.val().replace(' [reply]',''));
-                                $submit.attr('data-jc_reply', 1);
-                                $submit.attr('data-jc_reply_html', sub_title);
-                            }
-                            else
-                            {
-                                $submit.attr('title', sub_title);
-                            }
-                            
-                            $submit.val($submit.val().replace('[validate]','[v]'));
-                            console.log($submit.val());
-                            $submit.prop('type', "button").addClass('jc_ticket_submit');
+                            $submit.val($submit.val().replace(' [reply]',''));
+                            $submit.attr('data-jc_reply', 1);
+                            $submit.attr('data-jc_reply_html', sub_title);
                         }
                         else
                         {
                             $submit.attr('title', sub_title);
-                            $submit.attr('onclick', "jQuery('#noticeajax').show().html('<div class=\"sloading loading-block\"></div>');jQuery('html, body').animate({scrollTop: 0}, 500);");
+                        }
+                            
+                        if($submit.val().indexOf('[validate]') != -1)
+                        {
+                            $submit.val($submit.val().replace('[validate]','[v]'));
+                            $submit.attr('data-jc_validate', 1);
                         }
                     });
                 });
@@ -70,11 +67,12 @@
                         }
                     }
                     
-                    if(jQuery('#custom_ticket_form').valid())
+                    var $form = jQuery(e.target).closest('form');
+                    
+                    if( ($target.attr('data-jc_validate') == 1 && jQuery('#custom_ticket_form').valid()) || $target.attr('data-jc_reply') == 1)
                     {
                         jQuery('html, body').animate({scrollTop: 0}, 500);
                         jQuery('#noticeajax').show().html('<div class=\"sloading loading-block\"></div>');
-                        var $form = jQuery(e.target).closest('form');
                       	
                         if($target.attr('data-jc_reply') == 1)
                         {
@@ -99,7 +97,14 @@
                     }
                     else
                     {
-                        jQuery('html, body').animate({scrollTop: jQuery('#custom_ticket_form').offset().top-100}, 500);
+                        if($target.attr('data-jc_validate') == 1)
+                        {
+                            jQuery('html, body').animate({scrollTop: jQuery('#custom_ticket_form').offset().top-100}, 500);
+                        }
+                        else
+                        {
+                            $form.submit();
+                        }
                     }
                 });
             });
